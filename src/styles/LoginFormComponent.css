@@ -9,7 +9,7 @@
     --spacing-4x: calc(var(--spacing-1x) * 4);
   
     --font-size-16: 16px;
-    --login-form-el-height: 50px;
+    --login-form-el-height: 80px;
   
     box-sizing: border-box;
     display: flex;
@@ -54,10 +54,15 @@
   color: #000000;
   background-color: #f1f1f1;
   outline: none;
-  padding: 0 var(--spacing-2x);
+  padding: 3px 4px;
   cursor: text;
   border: none;
+  height: 30px;
   border-radius: var(--border-radius-1x);
+}
+
+.form-container input:focus {
+  border: 2px solid #000000;
 }
 
 .login-btn {
@@ -72,7 +77,7 @@
   font-size: var(--font-size-16);
   border-radius: 0 0 10px 10px;
   margin: 0 0 var(--spacing-2x);
-
+  height: 30px;
   cursor: pointer;
   font-weight: 500;
   background-color: #303030;
@@ -86,11 +91,5 @@
 .rive-container {
   min-height: 300px;
   min-width: 400px;
-  width: 100%;
   margin: 0 auto;
-}
-
-.login-form-wrapper {
-  width: 100%;
-  max-width: 400px;
 }

@@ -1,5 +1,8 @@
+// ignore typescript errors
 // @ts-nocheck
+
 import {ChangeEvent, SyntheticEvent, useState, useRef, useEffect} from "react";
+import "../styles/LoginFormComponent.css"
 
 import { 
     useRive,
@@ -8,19 +11,20 @@ import {
     Alignment,
     UseRiveParameters,
     StateMachineInput,
-    useStateMachineInput
- } from "rive-react";
+    useStateMachineInput,
+    RiveState,
+} from "rive-react";
 
 const STATE_MACHINE_NAME = 'Login Machine'
 const LOGIN_PASSWORD = 'teddy';
 
 const LoginFormComponent = (riveProps: UseRiveParameters = {}) => {
-
-    const inputRef = useRef(null);
+    
     const [userValue, setUserValue] = useState('');
     const [passValue, setPassValue] = useState('');
     const [inputLookMultiplier, setInputLookMultiplier] = useState(0);
     const [loginButtonText, setLoginButtonText] = useState('Login');
+    const inputRef = useRef(null);
 
     useEffect(() => {
         if (inputRef?.current && !inputLookMultiplier) {
@@ -40,7 +44,7 @@ const LoginFormComponent = (riveProps: UseRiveParameters = {}) => {
     });
 
     const onSubmit = (e: SyntheticEvent) => {
-        setLoginButtonText('Logging in...');
+        setLoginButtonText('Checking...');
         setTimeout(() => {
             setLoginButtonText('Login');
             passValue === LOGIN_PASSWORD ? trigSuccessInput.fire() : trigFailInput.fire();
@@ -49,22 +53,21 @@ const LoginFormComponent = (riveProps: UseRiveParameters = {}) => {
         return false;
     };
 
+    // State Machine Inputs
     const isCheckingInput: StateMachineInput = useStateMachineInput(riveInstance, STATE_MACHINE_NAME, 'isChecking');
-
     const numLookInput: StateMachineInput = useStateMachineInput(riveInstance, STATE_MACHINE_NAME, 'numLook');
-
     const trigSuccessInput: StateMachineInput = useStateMachineInput(riveInstance, STATE_MACHINE_NAME, 'trigSuccess');
-
     const trigFailInput: StateMachineInput = useStateMachineInput(riveInstance, STATE_MACHINE_NAME, 'trigFail');
-
     const isHandsUpInput: StateMachineInput = useStateMachineInput(riveInstance, STATE_MACHINE_NAME, 'isHandsUp');
-    
+
     const onUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newVal = e.target.value;
         setUserValue(newVal);
+
         if(!isCheckingInput.value) {
             isCheckingInput.value = true;
         }
+
         const numChars = newVal.length;
         numLookInput.value = numChars * inputLookMultiplier;
     };
@@ -77,23 +80,24 @@ const LoginFormComponent = (riveProps: UseRiveParameters = {}) => {
     }
 
     return (
-        <div>
+        <div className="rive-container">
             <div className="rive-wrapper">
                 <RiveComponent className="rive-container"/>
             </div>
             <div className={"form-container"}>
                 <form onSubmit={onSubmit}>
-                    <label htmlFor="">
+                    <label htmlFor="username">
                         <input type="text" className="form-username"
                         name="username"
                         placeholder="Username"
                         onFocus={onUsernameChange}
                         value={userValue}
                         onChange={onUsernameChange}
+                        onBlur={()=> isCheckingInput.value = false}
                         ref={inputRef}
                         />
                     </label>
-                    <label htmlFor="">
+                    <label htmlFor="password">
                         <input type="password" 
                         className="form-pass"
                         name="password"
@@ -106,7 +110,7 @@ const LoginFormComponent = (riveProps: UseRiveParameters = {}) => {
                         onBlur={() => isHandsUpInput.value = false}
                         />
                     </label>
-                    <button className="login-btn">Login</button>
+                    <button className="login-btn">{loginButtonText}</button>
                 </form>
             </div>
         </div>
