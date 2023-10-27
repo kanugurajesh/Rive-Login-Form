@@ -1,5 +1,6 @@
 import LoginFormComponent from "./components/LoginFormComponent"
 import "./styles/LoginFormComponent.css"
+import "./App.css"
 
 function App() {
   return (
