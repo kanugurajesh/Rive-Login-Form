@@ -93,3 +93,14 @@
   min-width: 400px;
   margin: 0 auto;
 }
+
+@media screen and (max-width: 768px) {
+  .login-form-component-root {
+    min-width: 100%;
+  }
+  
+  .rive-container {
+    min-height: 200px;
+    min-width: 300px;
+  }
+}
